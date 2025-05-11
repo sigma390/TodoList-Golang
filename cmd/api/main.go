@@ -27,16 +27,54 @@ func main() {
 
 	user := models.User{
 		ID:        primitive.NewObjectID(),
-		Username:  "John Doe",
-		Email:     "john.doe@example.com",
+		Username:  "omakr patil",
+		Email:     "omakrpatil@gmail.com",
 		Password:  "password123",
 		CreatedAt: time.Now(),
 		UpdatedAt: time.Now(),
 	}
 
+	users := []models.User{{
+		ID:        primitive.NewObjectID(),
+		Username:  "omakr patil",
+		Email:     "omakrpatil@gmail.com",
+		Password:  "password123",
+		CreatedAt: time.Now(),
+		UpdatedAt: time.Now(),
+	}, {
+		ID:        primitive.NewObjectID(),
+		Username:  "anish patil",
+		Email:     "anishpatil@gmail.com",
+		Password:  "password123",
+		CreatedAt: time.Now(),
+		UpdatedAt: time.Now(),
+	}, {
+		ID:        primitive.NewObjectID(),
+		Username:  "Jessie patil",
+		Email:     "jessiepatil@gmail.com",
+		Password:  "password123",
+		CreatedAt: time.Now(),
+		UpdatedAt: time.Now(),
+	}}
+
 	err = userRepo.CreateUser(context.Background(), &user)
 	if err != nil {
 		log.Fatal(err)
+	}
+	for _, user := range users {
+		err := userRepo.CreateUser(context.Background(), &user)
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
+
+	allUsers, err := userRepo.GetAllUsers(context.Background())
+	if err != nil {
+		log.Fatal(err)
+	}
+	for _, user := range allUsers {
+		fmt.Println(user)
+		fmt.Println("--------------------------------")
 	}
 
 	todo := models.Todo{
