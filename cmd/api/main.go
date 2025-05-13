@@ -4,11 +4,15 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"net/http"
 	"time"
 
+	"example.com/internal/api"
 	"example.com/internal/db"
 	"example.com/internal/models"
 	"example.com/internal/repository"
+	"github.com/go-chi/chi/v5"
+
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
@@ -24,6 +28,9 @@ func main() {
 	//create a Repo
 	todoRepo := repository.NewMongoTodoRepository(mongo)
 	userRepo := repository.NewMongoUserRepository(mongo)
+
+	//get Handlers
+	todoHandler := api.NewTodoHandler(todoRepo)
 
 	user := models.User{
 		ID:        primitive.NewObjectID(),
@@ -100,6 +107,16 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	//Create A Router
+	mux := chi.NewRouter()
+
+	mux.Post("/todos", todoHandler.CreateTodo)
+	mux.Delete("/todos/{id}", todoHandler.DeleteTodo)
+
+	//start server
+	http.ListenAndServe(":8080", mux)
+
 	fmt.Println(todo1)
 
 }
