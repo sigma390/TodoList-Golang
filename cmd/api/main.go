@@ -108,6 +108,7 @@ func main() {
 		log.Fatal(err)
 	}
 
+	fmt.Println(todo1)
 	//Create A Router
 	mux := chi.NewRouter()
 
@@ -116,7 +117,7 @@ func main() {
 
 	//start server
 	http.ListenAndServe(":8080", mux)
-
-	fmt.Println(todo1)
+	fmt.Println("Server starting on port 8080...")
+	log.Fatal(http.ListenAndServe(":8080", mux))
 
 }

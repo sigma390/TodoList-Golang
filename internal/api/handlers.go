@@ -64,3 +64,34 @@ func (h *TodoHandler) DeleteTodo(w http.ResponseWriter, r *http.Request) {
 	//return 200 ok
 	w.WriteHeader(http.StatusOK)
 }
+
+func (h *TodoHandler) GetTodo(w http.ResponseWriter, r *http.Request) {
+	//get id from url
+	id := chi.URLParam(r, "id")
+	if id == "" {
+		http.Error(w, "ID is required", http.StatusBadRequest)
+		return
+	}
+	//Look up into Db
+	todo, err := h.todoRepo.GetTodo(r.Context(), id)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	//return 200 ok
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(todo) //Directly Convert Todo to Json
+	/*
+		other way to Do the Same is
+		json,err:=json.Marshal(todo)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
+		w.Write(json)
+
+	*/
+
+}
