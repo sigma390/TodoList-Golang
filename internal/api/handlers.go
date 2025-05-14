@@ -62,7 +62,9 @@ func (h *TodoHandler) DeleteTodo(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	//return 200 ok
+
 	w.WriteHeader(http.StatusOK)
+	w.Write([]byte("Todo Deleted Successfully"))
 }
 
 func (h *TodoHandler) GetTodo(w http.ResponseWriter, r *http.Request) {
